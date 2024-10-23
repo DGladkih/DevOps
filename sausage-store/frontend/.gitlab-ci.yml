@@ -1,7 +1,3 @@
-stages:
-  - build
-  - notify
-
 build-frontend-code-job:
   stage: build
   rules:
@@ -14,6 +10,25 @@ build-frontend-code-job:
   artifacts:
     paths:
     - frontend/dist/frontend
+
+variables:
+  SONAR_LOGIN: "69fa85d8af0f098547ba1ef03678d65d3d421324"
+
+sonarqub-frontend-sast:
+  stage: test
+  rules:
+    - changes:
+      - frontend/**/*
+  image: sonarsource/sonar-scanner-cli
+  needs: 
+    - build-frontend-code-job
+  script:
+    sonar-scanner -X
+    -Dsonar.projectKey=$SONAR_PROJECT_KEY_FRONT
+    -Dsonar.sources=.
+    -Dsonar.host.url=$SONARQUBE_URL
+    -Dsonar.login=$SONAR_LOGIN
+    -Dsonar.exclusions=**/*.java
 
 telegram-notification-frontend:
   stage: notify
