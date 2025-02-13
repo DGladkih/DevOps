@@ -1,0 +1,96 @@
+- name: Install curl
+  apt:
+    name: curl
+    state: present
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+  become: yes
+
+- name: Download Node.js setup script
+  get_url:
+    url: https://deb.nodesource.com/setup_23.x
+    dest: /tmp/nodesource_setup.sh
+    mode: '0755'
+
+- name: Run Node.js setup script
+  command: bash /tmp/nodesource_setup.sh
+  become: yes
+
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: present
+  become: yes
+
+- name: Create www-data user
+  user:
+    name: www-data
+    system: yes
+    shell: /bin/false
+    home: /var/www-data
+
+- name: Create frontend directory
+  file:
+    path: /var/www-data
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Download frontend artifact from Nexus
+  get_url:
+    url: "https://nexus.praktikum-services.tech/repository/std-ext-014-39-frontend/home/student/artifacts.zip"
+    url_username: "{{ url_username }}"
+    url_password: "{{ url_password }}"
+    validate_certs: no
+    dest: "/var/www-data/frontend.zip"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  register: frontend_download
+  until: frontend_download is success
+  retries: 3
+  delay: 10
+  
+- name: Install unzip package
+  apt:
+    name: unzip
+    state: present
+  become: yes
+
+- name: Extract frontend artifact
+  unarchive:
+    src: "/var/www-data/frontend.zip"
+    dest: "/var/www-data"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+  become: yes
+
+- name: Create Nginx configuration for frontend
+  template:
+    src: frontend_nginx.conf.j2
+    dest: /etc/nginx/sites-available/frontend
+  become: yes
+
+- name: Test Nginx configuration
+  command: nginx -t
+  become: yes
+  register: nginx_test
+  ignore_errors: no
+
+- name: Enable Nginx site configuration
+  file:
+    src: /etc/nginx/sites-available/frontend
+    dest: /etc/nginx/sites-enabled/frontend
+    state: link
+  become: yes
+
+- name: Reload Nginx to apply changes
+  systemd:
+    name: nginx
+    state: reloaded
+  become: yes
