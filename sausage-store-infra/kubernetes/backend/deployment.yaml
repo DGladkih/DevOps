@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: std-ext-014-39
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: VAULT_HOST
+              value: http://vault:8200
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault
+                  key: vault_token
+      imagePullSecrets:
+        - name: docker-config-secret
