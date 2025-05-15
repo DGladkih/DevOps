@@ -1,0 +1,21 @@
+stages:
+  - deploy
+
+deploy-k8s:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  environment:
+    name: production
+    url: https://std-ext-014-39.k8s.praktikum-services.tech
+  before_script:
+    - mkdir -p ~/.kube
+    - echo "$KUBECONFIG" | base64 -d > ~/.kube/config
+  script:
+    - kubectl apply -f infrastructure/kubernetes/backend/
+    - kubectl apply -f infrastructure/kubernetes/backend-report/
+    - kubectl apply -f infrastructure/kubernetes/frontend/
+  after_script:
+    - rm -f ~/.kube/config
+  only:
+    changes:
+      - infrastructure/kubernetes/**/*
