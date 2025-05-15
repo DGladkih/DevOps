@@ -1,29 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: backend-report
   namespace: std-ext-014-39
   labels:
-    app: backend
+    app: backend-report
 spec:
   revisionHistoryLimit: 12
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 20%
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: backend
+      app: backend-report
   template:
     metadata:
       labels:
-        app: backend
+        app: backend-report
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - backend-report
       containers:
-        - name: backend
-          image: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store:latest
+        - name: backend-report
+          image: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store-report:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

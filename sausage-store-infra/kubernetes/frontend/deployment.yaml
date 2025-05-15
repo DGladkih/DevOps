@@ -3,7 +3,10 @@ kind: Deployment
 metadata:
   name: frontend
   namespace: std-ext-014-39
+  labels:
+    app: frontend
 spec:
+  revisionHistoryLimit: 12
   replicas: 1
   selector:
     matchLabels:
