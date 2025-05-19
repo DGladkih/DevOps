@@ -1,0 +1,34 @@
+global:
+  imagePullSecret: "ewoJImF1dGhzIjogewoJCSJnaXRsYWIucHJha3Rpa3VtLXNlcnZpY2VzLnJ1OjUwNTAiOiB7CgkJCSJhdXRoIjogImMzUmtMV1Y0ZEMwd01UUXRNems2V1hCdE16UktOVEk9IgoJCX0KCX0KfQ=="
+  environment: production
+  registry: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store
+
+backend:
+  image: sausage-backend
+  replicas: 1
+  vaultToken: dnVoZDV0NjhYcVdfU1dkM2kzc0w=
+  vaultHost: http://vault:8200
+  resources:
+    requests:
+      cpu: 200m
+      memory: 200Mi
+    limits:
+      cpu: 2
+      memory: 3000Mi
+
+backend-report:
+  image: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store/sausage-backend-report:latest
+  replicaCount: 2
+  vaultToken: my-token
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+frontend:
+  image: sausage-frontend
+  replicas: 1
+  fqdn: std-ext-014-39.k8s.praktikum-services.tech

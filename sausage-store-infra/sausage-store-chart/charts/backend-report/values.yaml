@@ -1,0 +1,12 @@
+backend-report:
+  image: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store/sausage-backend-report:latest
+  replicaCount: 2
+  vaultHost: http://vault:8200
+  vaultToken: dnVoZDV0NjhYcVdfU1dkM2kzc0w=
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
