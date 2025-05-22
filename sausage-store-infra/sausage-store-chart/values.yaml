@@ -1,0 +1,52 @@
+global:
+  imagePullSecret: docker-config-secret
+  environment: production
+  registry: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store
+
+backend:
+  image: sausage-backend
+  tag: "0.1.4"
+  imagePullPolicy: Always
+  replicas: 1
+  vaultToken: dnVoZDV0NjhYcVdfU1dkM2kzc0w=
+  vaultHost: http://vault:8200
+  resources:
+    requests:
+      cpu: 200m
+      memory: 200Mi
+    limits:
+      cpu: 2
+      memory: 3000Mi
+  env:
+    - name: SPRING_DATASOURCE_URL
+      value: "jdbc:postgresql://rc1a-lnjh4tcz8tmknpnh.mdb.yandexcloud.net:6432/std-ext-014-39?sslmode=require&target_session_attrs=read-write"
+    - name: SPRING_DATASOURCE_USERNAME
+      value: "std-ext-014-39"
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: "Testusr1234"
+    - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+      value: update
+    - name: SPRING_JPA_SHOW_SQL
+      value: "false"
+
+backend-report:
+  image: sausage-backend-report
+  tag: latest
+  imagePullPolicy: Always
+  replicaCount: 2
+  vaultToken: my-token
+  vaultHost: http://vault:8200
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+frontend:
+  image: sausage-frontend
+  tag: latest
+  imagePullPolicy: Always
+  replicas: 1
+  fqdn: std-ext-014-39.k8s.praktikum-services.tech
