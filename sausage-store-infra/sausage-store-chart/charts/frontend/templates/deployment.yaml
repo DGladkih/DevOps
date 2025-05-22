@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: "{{ .Values.global.registry }}/{{ .Values.image }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.global.registry }}/{{ .Values.image }}:{{ .Values.tag }}"
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -35,4 +35,4 @@ spec:
           configMap:
             name: frontend-nginx-config
       imagePullSecrets:
-        - name: {{ .Values.global.imagePullSecret }}
+        - name: docker-config-secret

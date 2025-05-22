@@ -3,8 +3,8 @@ type: application
 name: sausage-store
 description: Sausage Store Helm Chart
 
-version: 0.1.0
-appVersion: "latest"
+version: 0.1.10
+appVersion: "0.1.10"
 
 dependencies:
   - name: backend

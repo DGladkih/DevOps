@@ -6,4 +6,4 @@ metadata:
     app.kubernetes.io/name: sausage-backend
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
-  VAULT_HOST: {{ .Values.vaultHost }}
+    VAULT_HOST: {{ .Values.vaultHost }}

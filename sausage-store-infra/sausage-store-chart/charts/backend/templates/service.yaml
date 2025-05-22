@@ -7,8 +7,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   selector:
-    app.kubernetes.io/name: sausage-backend
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: backend
   ports:
     - port: 8080
       targetPort: 8080

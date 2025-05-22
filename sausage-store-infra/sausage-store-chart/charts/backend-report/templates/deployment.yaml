@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: backend-report
-          image: "{{ .Values.image }}"
+          image: "{{ .Values.global.registry }}/{{ .Values.image }}:{{ .Values.tag }}"
           ports:
             - containerPort: 8080
           env:
@@ -36,8 +36,8 @@ spec:
             - name: VAULT_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: backend-repor-vault
+                  name: backend-report-vault
                   key: vault_token
           resources: {{ toYaml .Values.resources | nindent 14 }}
       imagePullSecrets:
-        - name: {{ .Values.global.imagePullSecret }}
+        - name: docker-config-secret
