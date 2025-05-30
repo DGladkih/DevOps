@@ -1,0 +1,38 @@
+groups:
+- name: sausage-store-alerts
+  rules:
+  - alert: BackendDown
+    expr: absent(up{job="sausage-backend"} == 1)
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Backend недоступен"
+      description: "Подсистема backend не отвечает"
+
+  - alert: InternalServerErrors
+    expr: increase(http_server_requests_seconds_count{status=~"5.."}[2m]) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Ошибка 5xx"
+      description: "Есть запросы с кодами 5xx"
+
+  - alert: SlowOrderRequests
+    expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{uri="/api/orders", method="POST"}[5m])) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Медленные POST-запросы"
+      description: "Задержка выше 100ms на /api/orders"
+
+  - alert: PrometheusEndpointErrors
+    expr: increase(http_server_requests_seconds_count{uri="/actuator/prometheus", status!~"2.."}[2m]) > 0
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Ошибка на /actuator/prometheus"
+      description: "Прометей endpoint отвечает ошибкой"
