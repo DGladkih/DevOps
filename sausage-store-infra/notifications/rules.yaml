@@ -1,38 +1,38 @@
 groups:
-- name: sausage-store-alerts
-  rules:
-  - alert: BackendDown
-    expr: absent(up{job="sausage-backend"} == 1)
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      summary: "Backend недоступен"
-      description: "Подсистема backend не отвечает"
+  - name: backend.rules
+    rules:
+      - alert: BackendDown
+        expr:  (up{app="backend"} unless up{app="backend"} == 0) or (up{app="backend"} == 0 or absent(up{app="backend"})) * 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend is down"
+          description: "STD-EXT-014-39. The backend job has been unreachable for more than 1 minute."
 
-  - alert: InternalServerErrors
-    expr: increase(http_server_requests_seconds_count{status=~"5.."}[2m]) > 0
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      summary: "Ошибка 5xx"
-      description: "Есть запросы с кодами 5xx"
+      - alert: HTTP500Errors
+        expr: http_server_request_seconds{status=~"5.."} > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "5xx error rate detected"
+          description: "STD-EXT-014-39. There are HTTP 5xx errors from the backend service."
 
-  - alert: SlowOrderRequests
-    expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{uri="/api/orders", method="POST"}[5m])) > 0.1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      summary: "Медленные POST-запросы"
-      description: "Задержка выше 100ms на /api/orders"
+      - alert: HighLatencyOrders
+        expr: histogram_quantile(0.95, sum(rate(http_request_seconds_bucket{method="POST", path="/api/orders"}[5m])) by(le)) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High latency on POST /api/orders"
+          description: "STD-EXT-014-39. The 95th percentile latency for POST /api/orders is above 100ms."
 
-  - alert: PrometheusEndpointErrors
-    expr: increase(http_server_requests_seconds_count{uri="/actuator/prometheus", status!~"2.."}[2m]) > 0
-    for: 2m
-    labels:
-      severity: critical
-    annotations:
-      summary: "Ошибка на /actuator/prometheus"
-      description: "Прометей endpoint отвечает ошибкой"
+      - alert: ActuatorPrometheusErrors
+        expr: http_server_requests_seconds{path="/actuator/prometheus", status!~"2.."} > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Errors on /actuator/prometheus"
+          description: "STD-EXT-014-39. Non-2xx responses detected for /actuator/prometheus endpoint."
