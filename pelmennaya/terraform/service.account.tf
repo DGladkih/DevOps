@@ -5,7 +5,7 @@ resource "yandex_iam_service_account" "kube" {
 }
 
 resource "yandex_iam_service_account_iam_binding" "kube-editor" {
-  service_account_id = yandex_inanoam_service_account.kube.id
+  service_account_id = yandex_iam_service_account.kube.id
   role               = "editor"
   members            = ["serviceAccount:${yandex_iam_service_account.kube.id}"]
 }
