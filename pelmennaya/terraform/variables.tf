@@ -1,6 +1,8 @@
 variable "yc_cloud_id" {}
 variable "yc_folder_id" {}
+variable "yc_subnet_id" {}
 variable "zone" {}
+
 
 variable "v4_cidr_blocks" {
   default = ["10.98.11.0/24"]

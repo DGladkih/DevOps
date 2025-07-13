@@ -12,6 +12,10 @@ resource "yandex_kubernetes_cluster" "main" {
       zone      = var.zone
     }
     public_ip = true
+    
+      cluster_auth {
+      enabled = true
+    }
 
     maintenance_policy {
       auto_upgrade = true
