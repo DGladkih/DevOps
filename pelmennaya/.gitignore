@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-
+.bak
 # Test binary, built with `go test -c`
 *.test
 
@@ -16,3 +16,13 @@ vendor/
 .idea/
 .vscode/
 .DS_Store
+key.json
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+*.pem
+*.key
+*.crt
+.env
+.env.*

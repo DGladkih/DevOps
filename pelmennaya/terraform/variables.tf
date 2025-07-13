@@ -15,3 +15,12 @@ variable "cluster_ipv4_range" {
 variable "service_ipv4_range" {
   default = "10.22.0.0/16"
 }
+
+variable "sa_storage_access_key" {
+  type = string
+}
+
+variable "sa_storage_secret_key" {
+  type = string
+  sensitive = true
+}

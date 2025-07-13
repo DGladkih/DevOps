@@ -18,9 +18,9 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
 }
 
 provider "registry.terraform.io/yandex-cloud/yandex" {
-  version     = "0.87.0"
-  constraints = "~> 0.87.0"
+  version     = "0.99.1"
+  constraints = "~> 0.99.0"
   hashes = [
-    "h1:msJUm5bL0ln5racH+xeUVVyW8xtFYeVkBEDJ9PtN7e4=",
+    "h1:AJN2jnZTw+Q/Ckx9Sei8Ghc6TMTVhFTPMPu+zugwjUs=",
   ]
 }

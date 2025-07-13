@@ -6,16 +6,12 @@ resource "yandex_kubernetes_cluster" "main" {
   service_ipv4_range = var.service_ipv4_range
 
   master {
-    version = "1.27"
+    version = "1.29"
     zonal {
       subnet_id = yandex_vpc_subnet.main.id
       zone      = var.zone
     }
     public_ip = true
-    
-      cluster_auth {
-      enabled = true
-    }
 
     maintenance_policy {
       auto_upgrade = true

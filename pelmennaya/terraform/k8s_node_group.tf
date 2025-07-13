@@ -1,7 +1,7 @@
 resource "yandex_kubernetes_node_group" "group" {
   cluster_id = yandex_kubernetes_cluster.main.id
   name       = "pelmen-node-group"
-  version    = "1.27"
+  version    = "1.29"
 
   instance_template {
     platform_id = "standard-v2"
