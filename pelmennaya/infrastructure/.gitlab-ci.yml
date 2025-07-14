@@ -9,9 +9,7 @@ helm-release:
     - helm repo update
   script:
     - helm package infrastructure/helm
-    - curl -v -u "$NEXUS_REPO_USER:$NEXUS_REPO_PASS" \
-        --upload-file momo-store-*.tgz \
-        $NEXUS_REPO_URL
+    - curl -v -u "$NEXUS_REPO_USER:$NEXUS_REPO_PASS" --upload-file momo-store-*.tgz $NEXUS_REPO_URL
   rules:
     - changes:
         - infrastructure/helm/**/*
