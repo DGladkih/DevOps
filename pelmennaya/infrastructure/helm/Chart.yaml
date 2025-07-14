@@ -1,0 +1,14 @@
+---
+apiVersion: v2
+type: application
+name: pelmen
+description: Pelmennaya Helm Chart
+
+version: "1.0.1"
+appVersion: "latest-1"
+
+dependencies:
+  - name: backend
+    version: "~1.0.0"
+  - name: frontend
+    version: "~1.0.1"
