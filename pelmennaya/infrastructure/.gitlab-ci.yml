@@ -1,0 +1,17 @@
+stages:
+  - release
+
+helm-release:
+  stage: release
+  image: alpine/k8s:1.22.6
+  before_script:
+    - helm repo add nexus $NEXUS_REPO_URL --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
+    - helm repo update
+  script:
+    - helm package infrastructure/helm
+    - curl -v -u "$NEXUS_REPO_USER:$NEXUS_REPO_PASS" \
+        --upload-file momo-store-*.tgz \
+        $NEXUS_REPO_URL
+  rules:
+    - changes:
+        - infrastructure/helm/**/*

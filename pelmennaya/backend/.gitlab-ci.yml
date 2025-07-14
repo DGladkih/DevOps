@@ -1,0 +1,46 @@
+variables:
+  VERSION: 1.0.${CI_PIPELINE_ID}
+
+stages:
+  - build
+  - release
+  - deploy
+
+build:
+  stage: build
+  image: golang:1.22
+  script:
+    - cd backend
+    - go build -o api-${VERSION} ./cmd/api
+  artifacts:
+    paths:
+      - backend/api-${VERSION}
+  rules:
+    - changes:
+        - backend/**/*
+
+docker-release:
+  stage: release
+  image: docker:24.0.2
+  services: [docker:dind]
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker build -t $CI_REGISTRY_IMAGE/backend:$VERSION backend/
+    - docker push $CI_REGISTRY_IMAGE/backend:$VERSION
+  rules:
+    - changes:
+        - backend/**/*
+
+deploy:
+  stage: deploy
+  image: alpine/k8s:1.22.6
+  script:
+    - mkdir ~/.kube
+    - echo "$kubeconfig" | base64 -d > ~/.kube/config
+    - helm repo add gitlab $CI_REGISTRY_IMAGE --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD || true
+    - helm repo update
+    - helm upgrade --install pelmennaya-backend infrastructure/helm/charts/backend --set image.tag=$VERSION
+  rules:
+    - changes:
+        - backend/**/*
+      when: manual
