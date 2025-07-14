@@ -1,0 +1,12 @@
+global:
+
+#  dockerconfigjson: eyJhdXRocyI6eyJnaXRsYWIucHJha3Rpa3VtLXNlcnZpY2VzLnJ1OjUwNTAiOnsidXNlcm5hbWUiOiJHSVRMQUJfVVNFUk5BTUUiLCJwYXNzd29yZCI6IkdJVExBQl9QRVJTT05BTF9BQ0NFU1NfVE9LRU4iLCJlbWFpbCI6ImdsYWRraWtoZGFuaWw5OUB5YW5kZXgucnUiLCJhdXRoIjoiUjBsVVRFRkNYMVZUUlZKT1FVMUZPa2RKVkV4QlFsOVFSVkpUVDA1QlRGOUJRME5GVTFOZlZFOUxSVTQ9In19fQ==
+
+  backend:
+    ImageUrl: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/backend
+    AppVersion: latest
+
+  frontend:
+    fqdn: gladkikhpelmen.ddns.net
+    ImageUrl: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/frontend
+    AppVersion: latest

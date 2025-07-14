@@ -13,7 +13,6 @@ spec:
       app: {{ .Chart.Name }}
   strategy:
     type: RollingUpdate
-    #type: Recreate
   template:
     metadata:
       labels:
