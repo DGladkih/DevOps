@@ -8,7 +8,6 @@ helm-release:
     - mkdir -p ~/.kube
     - echo "$kubeconfig" | base64 -d > ~/.kube/config
     - cp ~/.kube/config ./kubeconfig
-    - kubectl --kubeconfig=./kubeconfig get nodes
     - helm upgrade --install pelmennaya ./infrastructure/helm \
         --namespace default \
         --create-namespace \

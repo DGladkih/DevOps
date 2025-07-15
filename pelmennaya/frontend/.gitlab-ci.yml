@@ -4,11 +4,9 @@ stages:
 
 variables:
   VERSION: "1.0.${CI_PIPELINE_ID}"
-  DOCKER_DRIVER: overlay2
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE/frontend"
 
-build-frontend-image:
+build-frontend:
   stage: build
   image: node:16
   script:
@@ -17,24 +15,26 @@ build-frontend-image:
     - npm run build
     - mv dist public_html
     - cp nginx.conf public_html/
+  artifacts:
+    paths:
+      - frontend/public_html/
   tags:
     - kubernetes
 
-docker-push-frontend:
+kaniko-build-frontend:
   stage: release
-  image: docker:20.10.12
-  services:
-    - docker:20.10.12-dind
+  image: gcr.io/kaniko-project/executor:latest
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - until docker info; do sleep 1; done
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    DOCKER_CONFIG: /kaniko/.docker/
   script:
-    - cp -r frontend/public_html frontend/  # или подкорректируй Dockerfile
-    - docker build -t $CI_REGISTRY_IMAGE/frontend:$VERSION frontend/
-    - docker push $CI_REGISTRY_IMAGE/frontend:$VERSION
-  needs: [build-frontend-image]
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cp -r frontend/public_html frontend/  # предполагаем, что Dockerfile использует ./public_html
+    - /kaniko/executor
+        --context $CI_PROJECT_DIR/frontend
+        --dockerfile $CI_PROJECT_DIR/frontend/Dockerfile
+        --destination $IMAGE_NAME:$VERSION
+        --destination $IMAGE_NAME:latest
   tags:
     - kubernetes
+  needs: [build-frontend]
