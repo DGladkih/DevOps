@@ -2,7 +2,7 @@ stages:
   - module-pipelines
 
 variables:
-  VERSION: "1.0.${CI_PIPELINE_ID}"
+  VERSION: 1.0.1
 
 frontend:
   stage: module-pipelines
@@ -10,8 +10,6 @@ frontend:
     include:
       - local: 'frontend/.gitlab-ci.yml'
     strategy: depend
-    variables:
-      VERSION: $VERSION
   only:
     changes:
       - frontend/**/*
@@ -22,8 +20,6 @@ backend:
     include:
       - local: 'backend/.gitlab-ci.yml'
     strategy: depend
-    variables:
-      VERSION: $VERSION
   only:
     changes:
       - backend/**/*
@@ -34,8 +30,6 @@ helm:
     include:
       - local: 'infrastructure/.gitlab-ci.yml'
     strategy: depend
-    variables:
-      VERSION: $VERSION
   needs:
     - backend
     - frontend

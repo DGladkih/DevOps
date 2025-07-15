@@ -1,6 +1,9 @@
 stages:
   - build
   - release
+  
+variables:
+  VERSION: 1.0.11
 
 build-backend:
   stage: build
