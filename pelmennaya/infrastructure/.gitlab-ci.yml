@@ -20,13 +20,11 @@ helm-release:
 
 helm-publish:
   stage: publish
-  image: alpine/helm:3.9.0
+  image: alpine/helm:3.14.0
   script:
-    - echo "$NEXUS_REPO_PASS" | helm registry login $NEXUS_REPO_URL --username $NEXUS_REPO_USER --password-stdin
-    - helm package ./infrastructure/helm
-    - helm push pelmennaya-*.tgz oci://$NEXUS_REPO_URL
+    - helm package ./infrastructure/helm --version $VERSION
+    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS \
+        --upload-file pelmennaya-$VERSION.tgz \
+        "$NEXUS_REPO_URL"
   tags:
     - kubernetes
-  only:
-    changes:
-      - infrastructure/helm/**/*
