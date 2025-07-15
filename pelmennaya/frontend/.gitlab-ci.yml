@@ -21,22 +21,15 @@ build-frontend:
   tags:
     - kubernetes
 
-kaniko-build-frontend:
+docker-build-frontend:
   stage: release
-  image:
-    name: gcr.io/kaniko-project/executor:latest
-    entrypoint: [""]
-  variables:
-    DOCKER_CONFIG: /kaniko/.docker/
+  image: docker:20.10.12-dind-rootless
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cp -r frontend/public frontend/ 
-    - /kaniko/executor
-        --context $CI_PROJECT_DIR/frontend
-        --dockerfile $CI_PROJECT_DIR/frontend/Dockerfile
-        --destination $IMAGE_NAME:$VERSION
-        --destination $IMAGE_NAME:latest
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - cp -r frontend/public frontend/
+    - docker build -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest frontend
+    - docker push $IMAGE_NAME:$VERSION
+    - docker push $IMAGE_NAME:latest
+  needs: [build-frontend]
   tags:
     - kubernetes
-  needs: [build-frontend]
