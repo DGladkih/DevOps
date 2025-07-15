@@ -4,12 +4,14 @@ stages:
 helm-release:
   stage: release
   image: alpine/k8s:1.22.6
-  before_script:
-    - helm repo add nexus $NEXUS_REPO_URL --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
-    - helm repo update
   script:
-    - helm package infrastructure/helm
-    - curl -v -u "$NEXUS_REPO_USER:$NEXUS_REPO_PASS" --upload-file momo-store-*.tgz $NEXUS_REPO_URL
-  rules:
-    - changes:
-        - infrastructure/helm/**/*
+    - mkdir -p ~/.kube
+    - echo "$kubeconfig" | base64 -d > ~/.kube/config
+    - cp ~/.kube/config ./kubeconfig
+    - kubectl --kubeconfig=./kubeconfig get nodes
+    - helm upgrade --install pelmennaya ./infrastructure/helm \
+        --namespace default \
+        --create-namespace \
+        --kubeconfig ./kubeconfig \
+        --set global.backend.AppVersion=$VERSION \
+        --set global.frontend.AppVersion=$VERSION
