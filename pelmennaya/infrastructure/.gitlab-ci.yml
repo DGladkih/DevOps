@@ -2,7 +2,7 @@ stages:
   - release
 
 variables:
-  VERSION: ${VERSION:-"latest"}
+  VERSION: ${VERSION:-"latest-1"}
 
 helm-release:
   stage: release
