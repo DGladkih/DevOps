@@ -1,6 +1,9 @@
 stages:
   - release
 
+variables:
+  VERSION: ${VERSION:-"latest"}
+
 helm-release:
   stage: release
   image: alpine/k8s:1.22.6
