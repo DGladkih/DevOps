@@ -2,16 +2,22 @@ stages:
   - release
 
 variables:
-  VERSION: ${VERSION:-"latest-1"}
+  VERSION: "1.0.${CI_PIPELINE_ID}"
 
 helm-release:
   stage: release
   image: alpine/k8s:1.22.6
   script:
+    - echo "VERSION=$VERSION"
     - mkdir -p ~/.kube
     - echo "$kubeconfig" | base64 -d > ~/.kube/config
     - cp ~/.kube/config ./kubeconfig
     - helm dependency build ./infrastructure/helm
-    - helm upgrade --install pelmennaya ./infrastructure/helm --namespace default --create-namespace --kubeconfig ./kubeconfig --set global.backend.AppVersion=$VERSION --set global.frontend.AppVersion=$VERSION
+    - helm upgrade --install pelmennaya ./infrastructure/helm \
+        --namespace default \
+        --create-namespace \
+        --kubeconfig ./kubeconfig \
+        --set global.backend.AppVersion=$VERSION \
+        --set global.frontend.AppVersion=$VERSION
   tags:
     - kubernetes
