@@ -23,7 +23,9 @@ build-frontend:
 
 kaniko-build-frontend:
   stage: release
-  image: gcr.io/kaniko-project/executor:latest
+  image:
+    name: gcr.io/kaniko-project/executor:latest
+    entrypoint: [""]
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:

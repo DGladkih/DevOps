@@ -21,8 +21,9 @@ build-backend:
 
 kaniko-build-backend:
   stage: release
-  image: gcr.io/kaniko-project/executor:latest
-  entrypoint: [""]
+  image:
+    name: gcr.io/kaniko-project/executor:latest
+    entrypoint: [""]
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
@@ -36,3 +37,4 @@ kaniko-build-backend:
         --destination $IMAGE_NAME:latest
   tags:
     - kubernetes
+  needs: [build-backend]
