@@ -1,23 +1,51 @@
 stages:
+  - build-code
+  - build-docker
   - release
 
 variables:
   VERSION: "1.0.${CI_PIPELINE_ID}"
-  IMAGE_NAME: "$CI_REGISTRY_IMAGE/backend"
 
-release-backend:
-  stage: release
-  image: docker:latest
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_TLS_CERTDIR: ""
+build-backend:
+  stage: build-code
+  image: golang:1.20
   script:
+    - cd backend 
+    - go build -o api ./cmd/api
+    - mv api ../api-${VERSION}
+  artifacts:
+    paths:
+      - api-${VERSION}
+
+docker-build-backend:
+  stage: build-docker
+  image: docker:20.10.12-dind-rootless
+  before_script:
+    - until docker info; do sleep 1; done
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - docker build -t $CI_REGISTRY_IMAGE/backend:$VERSION -f backend/Dockerfile ./backend
+  script:
+    - cp api-${VERSION} backend/
+    - cd backend
+    - >
+      docker build
+      --build-arg VERSION=$VERSION
+      -t $CI_REGISTRY_IMAGE/backend:$VERSION
+      .
     - docker push $CI_REGISTRY_IMAGE/backend:$VERSION
+  needs: [build-backend]
+  tags:
+    - kubernetes
+
+push-backend-latest:
+  stage: release
+  image: docker:20.10.12-dind-rootless
+  before_script:
+    - until docker info; do sleep 1; done
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/backend:$VERSION
     - docker tag $CI_REGISTRY_IMAGE/backend:$VERSION $CI_REGISTRY_IMAGE/backend:latest
     - docker push $CI_REGISTRY_IMAGE/backend:latest
+  needs: [docker-build-backend]
   tags:
     - kubernetes
