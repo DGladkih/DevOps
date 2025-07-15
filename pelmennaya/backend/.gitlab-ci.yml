@@ -21,4 +21,4 @@ release-backend:
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   tags:
     - kubernetes
-  **privileged: true**
+  privileged: true
