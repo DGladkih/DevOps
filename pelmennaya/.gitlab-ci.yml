@@ -30,3 +30,6 @@ helm:
   only:
     changes:
       - infrastructure/helm/**/*
+      - backend/**/*
+      - frontend/**/*
+      
