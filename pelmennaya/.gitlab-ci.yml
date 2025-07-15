@@ -27,6 +27,9 @@ helm:
     include:
       - local: 'infrastructure/.gitlab-ci.yml'
     strategy: depend
+  needs:
+    - backend
+    - frontend
   only:
     changes:
       - infrastructure/helm/**/*
