@@ -1,14 +1,14 @@
----
 apiVersion: v2
+name: pelmennaya
+description: A Helm chart for the Pelmennaya application
 type: application
-name: pelmen
-description: Pelmennaya Helm Chart
-
-version: "1.0.1"
-appVersion: "latest-1"
+version: 1.0.1
+appVersion: "latest"
 
 dependencies:
   - name: backend
-    version: "~1.0.0"
+    version: 1.0.0
+    repository: "file://./charts/backend"
   - name: frontend
-    version: "~1.0.1"
+    version: 1.0.0
+    repository: "file://./charts/frontend"
