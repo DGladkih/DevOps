@@ -23,8 +23,6 @@ helm-publish:
   image: alpine/helm:3.14.0
   script:
     - helm package ./infrastructure/helm --version $VERSION
-    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS \
-        --upload-file pelmennaya-$VERSION.tgz \
-        "$NEXUS_REPO_URL"
+    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS --upload-file pelmennaya-$VERSION.tgz "$NEXUS_REPO_URL"
   tags:
     - kubernetes
