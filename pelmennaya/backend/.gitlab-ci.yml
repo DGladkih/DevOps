@@ -19,11 +19,7 @@ sonarqube-backend:
   stage: test
   image: sonarsource/sonar-scanner-cli:latest
   script:
-    - sonar-scanner \
-        -Dsonar.projectKey=gladkiklhpelmen_backend \
-        -Dsonar.sources=./backend \
-        -Dsonar.host.url=$SONAR_HOST_URL \
-        -Dsonar.login=$SONAR_TOKEN_BACKEND
+    - sonar-scanner -Dsonar.projectKey=gladkiklhpelmen_backend -Dsonar.sources=./backend -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN_BACKEND
   tags:
     - kubernetes
     
