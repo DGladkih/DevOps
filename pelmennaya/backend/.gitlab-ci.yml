@@ -14,7 +14,6 @@ test-backend:
     - go test ./...
   tags:
     - kubernetes
-Для frontend (если нет тест
 
 sonarqube-backend:
   stage: test
