@@ -13,11 +13,11 @@ build-frontend:
     - cd frontend
     - npm ci
     - npm run build
-    - mv dist public_html
-    - cp nginx.conf public_html/
+    - mv dist public
+    - cp nginx.conf public/
   artifacts:
     paths:
-      - frontend/public_html/
+      - frontend/public/
   tags:
     - kubernetes
 
@@ -29,7 +29,7 @@ kaniko-build-frontend:
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cp -r frontend/public_html frontend/  # предполагаем, что Dockerfile использует ./public_html
+    - cp -r frontend/public frontend/ 
     - /kaniko/executor
         --context $CI_PROJECT_DIR/frontend
         --dockerfile $CI_PROJECT_DIR/frontend/Dockerfile
