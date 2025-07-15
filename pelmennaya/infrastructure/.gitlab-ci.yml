@@ -13,11 +13,6 @@ helm-release:
     - echo "$kubeconfig" | base64 -d > ~/.kube/config
     - cp ~/.kube/config ./kubeconfig
     - helm dependency build ./infrastructure/helm
-    - helm upgrade --install pelmennaya ./infrastructure/helm \
-        --namespace default \
-        --create-namespace \
-        --kubeconfig ./kubeconfig \
-        --set global.backend.AppVersion=$VERSION \
-        --set global.frontend.AppVersion=$VERSION
+    - helm upgrade --install pelmennaya ./infrastructure/helm --namespace default --create-namespace --kubeconfig ./kubeconfig --set global.backend.AppVersion=$VERSION --set global.frontend.AppVersion=$VERSION
   tags:
     - kubernetes
