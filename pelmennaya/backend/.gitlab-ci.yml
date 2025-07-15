@@ -22,7 +22,7 @@ build-backend:
 kaniko-build-backend:
   stage: release
   image:
-    name: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/kaniko-wrapper:latest
+    name: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/kaniko-wrapper:v2
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
