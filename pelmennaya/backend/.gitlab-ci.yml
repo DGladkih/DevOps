@@ -22,19 +22,18 @@ build-backend:
 kaniko-build-backend:
   stage: release
   image:
-    name: gcr.io/kaniko-project/executor:latest
-    entrypoint: [""]
+    name: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/kaniko-wrapper:latest
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cp api backend/
-    - /kaniko/executor
-        --context $CI_PROJECT_DIR/backend
-        --dockerfile $CI_PROJECT_DIR/backend/Dockerfile
-        --destination $IMAGE_NAME:$VERSION
-        --destination $IMAGE_NAME:latest
+    - /kaniko/executor \
+        --context $CI_PROJECT_DIR/backend \
+        --dockerfile $CI_PROJECT_DIR/backend/Dockerfile \
+        --destination $CI_REGISTRY_IMAGE/backend:$VERSION \
+        --destination $CI_REGISTRY_IMAGE/backend:latest
   tags:
     - kubernetes
   needs: [build-backend]
