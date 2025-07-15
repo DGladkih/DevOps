@@ -1,8 +1,9 @@
 stages:
   - release
+  - publish
 
 variables:
-  VERSION: 1.0.1
+  VERSION: 1.0.12
 
 helm-release:
   stage: release
@@ -16,3 +17,16 @@ helm-release:
     - helm upgrade --install pelmennaya ./infrastructure/helm --namespace default --create-namespace --kubeconfig ./kubeconfig --set global.backend.AppVersion=$VERSION --set global.frontend.AppVersion=$VERSION
   tags:
     - kubernetes
+
+helm-publish:
+  stage: publish
+  image: alpine/helm:3.9.0
+  script:
+    - echo "$NEXUS_REPO_PASS" | helm registry login $NEXUS_REPO_URL --username $NEXUS_REPO_USER --password-stdin
+    - helm package ./infrastructure/helm
+    - helm push pelmennaya-*.tgz oci://$NEXUS_REPO_URL
+  tags:
+    - kubernetes
+  only:
+    changes:
+      - infrastructure/helm/**/*

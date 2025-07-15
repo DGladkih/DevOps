@@ -1,9 +1,21 @@
 stages:
+  - test
   - build
   - release
   
+sonarqube-backend:
+  stage: test
+  image: maven:3.8-openjdk-17
+  script:
+    - mvn sonar:sonar \
+        -Dsonar.projectKey=gladkiklhpelmen_backend \
+        -Dsonar.host.url=$SONAR_HOST_URL \
+        -Dsonar.login=$SONAR_TOKEN_BACKEND
+  tags:
+    - kubernetes
+  
 variables:
-  VERSION: 1.0.11
+  VERSION: 1.0.12
 
 build-backend:
   stage: build

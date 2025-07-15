@@ -3,7 +3,7 @@ name: pelmennaya
 description: A Helm chart for the Pelmennaya application
 type: application
 version: 1.0.1
-appVersion: "latest"
+appVersion: "1.0.1"
 
 dependencies:
   - name: backend
