@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ .Values.global.backend.ImageUrl }}:{{ .Values.global.backend.AppVersion }}
+          image: "{{ .Values.global.backend.ImageUrl }}:{{ .Values.global.backend.AppVersion }}"
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
