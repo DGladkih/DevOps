@@ -5,7 +5,7 @@ terraform {
     }
     bucket                      = "pelmen-tf-prod"
     region                      = "ru-central1"
-    key                         = "terraform.tfstate"
+    key                         = "dev/terraform.tfstate"
     skip_region_validation      = true
     skip_credentials_validation = true
   }

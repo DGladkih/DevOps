@@ -1,30 +1,30 @@
-resource "yandex_kubernetes_node_group" "group" {
-  cluster_id = yandex_kubernetes_cluster.main.id
-  name       = "pelmen-node-group"
-  version    = "1.29"
+resource "yandex_kubernetes_node_group" "this" {
+  cluster_id = var.cluster_id
+  name       = var.node_group_name
+  version    = var.k8s_version
 
   instance_template {
-    platform_id = "standard-v2"
+    platform_id = var.platform_id
 
     resources {
-      cores  = 2
-      memory = 4
+      cores  = var.cores
+      memory = var.memory
     }
 
     boot_disk {
-      type = "network-hdd"
-      size = 64
+      type = var.disk_type
+      size = var.disk_size
     }
 
     network_interface {
-      subnet_ids = [yandex_vpc_subnet.main.id]
+      subnet_ids = var.subnet_ids
       nat        = true
     }
   }
 
   scale_policy {
     fixed_scale {
-      size = 1
+      size = var.node_count
     }
   }
 

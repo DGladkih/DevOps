@@ -26,3 +26,4 @@ key.json
 *.crt
 .env
 .env.*
+terraform.tfvars

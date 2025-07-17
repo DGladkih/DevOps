@@ -1,3 +1,0 @@
-data "yandex_iam_token" "k8s_token" {
-  service_account_key_file = "key.json"
-}

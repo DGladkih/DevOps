@@ -1,11 +1,9 @@
 stages:
   - test
-  - build
   - release
-  
+
 variables:
   VERSION: 1.0.12
-  
 
 sonarqube-frontend:
   stage: test
@@ -15,22 +13,7 @@ sonarqube-frontend:
   tags:
     - kubernetes
 
-build-frontend:
-  stage: build
-  image: node:16
-  script:
-    - cd frontend
-    - npm ci
-    - npm run build
-    - mv dist public
-    - cp nginx.conf public/
-  artifacts:
-    paths:
-      - frontend/public/
-  tags:
-    - kubernetes
-
-docker-build-frontend:
+docker-release-frontend:
   stage: release
   image: docker:latest
   services:
@@ -43,6 +26,5 @@ docker-build-frontend:
     - docker build -t $CI_REGISTRY_IMAGE/frontend:$VERSION -t $CI_REGISTRY_IMAGE/frontend:latest frontend
     - docker push $CI_REGISTRY_IMAGE/frontend:$VERSION
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
-  needs: [build-frontend]
   tags:
     - kubernetes
