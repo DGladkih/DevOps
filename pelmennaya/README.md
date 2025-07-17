@@ -12,6 +12,8 @@
 - Grafana: `admin / admin`
 - Дашборд: 
 ![Alt text](image.png)
+- Логи:
+![Alt text](image-1.png)
 ---
 
 ## 🚀 Развёртывание приложения (Docker + Helm)
