@@ -10,7 +10,8 @@
 - Приложение: https://gladkikhpelmen.ru/
 - Мониторинг: https://grafana.gladkikhpelmen.ru/
 - Grafana: `admin / admin`
-
+- Дашборд: 
+![Alt text](image.png)
 ---
 
 ## 🚀 Развёртывание приложения (Docker + Helm)
