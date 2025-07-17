@@ -1,12 +1,12 @@
 stages:
-  - release
+  - deploy
   - publish
 
 variables:
   VERSION: 1.0.12
 
 helm-release:
-  stage: release
+  stage: deploy
   image: alpine/k8s:1.22.6
   script:
     - echo "VERSION=$VERSION"

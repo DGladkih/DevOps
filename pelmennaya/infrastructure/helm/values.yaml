@@ -5,8 +5,12 @@ global:
   backend:
     ImageUrl: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/backend
     AppVersion: latest
+    ContainerPort: 8081
+    ServicePort: 8081
 
   frontend:
     fqdn: gladkikhpelmen.ddns.net
     ImageUrl: gitlab.praktikum-services.ru:5050/std-ext-014-39/pelmennaya/frontend
     AppVersion: latest
+    ContainerPort: 80
+    ServicePort: 80

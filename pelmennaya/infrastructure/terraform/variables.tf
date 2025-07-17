@@ -1,26 +1,37 @@
-variable "yc_cloud_id" {}
-variable "yc_folder_id" {}
-variable "yc_subnet_id" {}
-variable "zone" {}
-
-
-variable "v4_cidr_blocks" {
-  default = ["10.98.11.0/24"]
+variable "network_name" {
+  type        = string
+  description = "Name of the VPC network"
 }
 
-variable "cluster_ipv4_range" {
-  default = "10.21.0.0/16"
+variable "subnets" {
+  type = list(object({
+    zone           = string
+    v4_cidr_blocks = list(string)
+  }))
+  description = "Subnets for the network module"
 }
 
-variable "service_ipv4_range" {
-  default = "10.22.0.0/16"
+variable "folder_id" {
+  type        = string
+  description = "Yandex Cloud folder ID"
 }
 
-variable "sa_storage_access_key" {
-  type = string
+variable "cluster_name" {
+  type        = string
+  description = "Name of the Kubernetes cluster"
 }
 
-variable "sa_storage_secret_key" {
-  type = string
-  sensitive = true
+variable "node_group_name" {
+  type        = string
+  description = "Name of the Kubernetes node group"
+}
+
+variable "node_count" {
+  type        = number
+  description = "Number of nodes in the node group"
+}
+
+variable "bucket_name" {
+  type        = string
+  description = "Name of the object storage bucket"
 }

@@ -30,7 +30,7 @@ spec:
                 name: {{ .Chart.Name }}-config
           ports:
             - name: {{ .Chart.Name }}
-              containerPort: 8081
+              containerPort: {{ .Values.global.backend.ContainerPort }}
           resources:
             requests:
               memory: "312Mi"

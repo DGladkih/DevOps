@@ -7,8 +7,8 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8081
+    - port: {{ .Values.global.backend.ServicePort }}
       protocol: TCP
-      targetPort: 8081
+      targetPort: {{ .Values.global.backend.ContainerPort }}
   selector:
-      app: {{ .Chart.Name }}
+    app: {{ .Chart.Name }}

@@ -6,8 +6,8 @@ metadata:
     app: {{ .Chart.Name }}
 spec:
   ports:
-    - port: 80
+    - port: {{ .Values.global.frontend.ServicePort }}
       protocol: TCP
-      targetPort: 80
+      targetPort: {{ .Values.global.frontend.ContainerPort }}
   selector:
     app: {{ .Chart.Name }}
