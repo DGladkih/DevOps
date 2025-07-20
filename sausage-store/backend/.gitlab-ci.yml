@@ -13,7 +13,7 @@ build-backend-code-job:
         - backend/**/*
   script:
     - cd backend
-    - mvn package
+    - SPRING_FLYWAY_ENABLED=false mvn clean package
   artifacts:
     paths:
       - backend/target/sausage-store-0.0.1-SNAPSHOT.jar

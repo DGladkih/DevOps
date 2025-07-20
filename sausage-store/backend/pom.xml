@@ -67,6 +67,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+<<<<<<< 4f8555e631a55557fbcc1f21112b176e1226685f
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+=======
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
@@ -75,8 +80,9 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+>>>>>>> db9b0a93fa1110547ac2f1e30e457903108ff700
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>
