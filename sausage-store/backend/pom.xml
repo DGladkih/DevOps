@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+ <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -19,6 +19,20 @@
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     </properties>
     <dependencies>
+
+       <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+
+
+       <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.4</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -53,9 +67,20 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+<<<<<<< 4f8555e631a55557fbcc1f21112b176e1226685f
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
+=======
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+>>>>>>> db9b0a93fa1110547ac2f1e30e457903108ff700
     </dependencies>
     
     <build>
@@ -63,7 +88,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-	   </plugin>
+     </plugin>
 
             <plugin>
             <groupId>org.sonarsource.scanner.maven</groupId>
@@ -72,5 +97,11 @@
            </plugin>
         </plugins>
     </build>
-
+    <distributionManagement>
+      <repository>
+           <id>sausage-store</id>
+           <name>sausage-store</name>
+           <url>${env.NEXUS_REPO_URL}/repository/${env.NEXUS_REPO_BACKEND_NAME}</url>
+       </repository>
+    </distributionManagement>
 </project>
