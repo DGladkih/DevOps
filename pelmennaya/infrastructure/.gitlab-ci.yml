@@ -1,0 +1,28 @@
+stages:
+  - deploy
+  - publish
+
+variables:
+  VERSION: 1.0.12
+
+helm-release:
+  stage: deploy
+  image: alpine/k8s:1.22.6
+  script:
+    - echo "VERSION=$VERSION"
+    - mkdir -p ~/.kube
+    - echo "$kubeconfig" | base64 -d > ~/.kube/config
+    - cp ~/.kube/config ./kubeconfig
+    - helm dependency build ./infrastructure/helm
+    - helm upgrade --install pelmennaya ./infrastructure/helm --namespace default --create-namespace --kubeconfig ./kubeconfig --set global.backend.AppVersion=$VERSION --set global.frontend.AppVersion=$VERSION
+  tags:
+    - kubernetes
+
+helm-publish:
+  stage: publish
+  image: alpine/helm:3.14.0
+  script:
+    - helm package ./infrastructure/helm --version $VERSION
+    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS --upload-file pelmennaya-$VERSION.tgz "$NEXUS_REPO_URL"
+  tags:
+    - kubernetes

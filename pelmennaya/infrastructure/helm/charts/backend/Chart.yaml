@@ -1,0 +1,6 @@
+apiVersion: v2
+name: backend
+description: Backend service chart for Pelmennaya
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
