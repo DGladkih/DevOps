@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: std-ext-014-39
+  labels:
+    app: frontend
+spec:
+  revisionHistoryLimit: 12
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: gitlab.praktikum-services.ru:5050/std-ext-014-39/sausage-store/frontend:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: frontend-nginx-config
+      imagePullSecrets:
+        - name: docker-config-secret

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-report-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: backend-report
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app.kubernetes.io/component: backend-report
+    app.kubernetes.io/part-of: sausage-store
+    env: "{{ .Values.global.environment }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend-report
+  template:
+    metadata:
+      labels:
+        app: backend-report
+    spec:
+      containers:
+        - name: backend-report
+          image: "{{ .Values.global.registry }}/{{ .Values.image }}:{{ .Values.tag }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: VAULT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-report-config
+                  key: VAULT_HOST
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: backend-report-vault
+                  key: vault_token
+          resources: {{ toYaml .Values.resources | nindent 14 }}
+      imagePullSecrets:
+        - name: docker-config-secret

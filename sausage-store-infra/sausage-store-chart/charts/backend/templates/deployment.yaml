@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-{{ .Release.Name }}
+  labels:
+    app.kubernetes.io/name: sausage-backend
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: sausage-store
+    env: "{{ .Values.global.environment }}"
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+    spec:
+      imagePullSecrets:
+        - name: docker-config-secret
+      containers:
+        - name: backend
+          image: "{{ .Values.global.registry }}/{{ .Values.image }}:{{ .Values.tag }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: VAULT_HOST
+              value: {{ .Values.vaultHost | quote }}
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: vault_token
+{{- with .Values.env }}
+{{ toYaml . | nindent 12 }}
+{{- end }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}

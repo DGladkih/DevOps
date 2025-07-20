@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: std-ext-014-39
+data:
+  VAULT_HOST: http://vault:8200

@@ -1,0 +1,10 @@
+#cloud-config
+ssh_pwauth: false
+users:
+  - name: ansible
+    gecos: Ansible User
+    shell: /bin/bash
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCe1m/LDed12L/ky5i4EAskunIF836abhcIiTwSWCxnORCHHDZI0eqVoi6p7v63+Jozkrz5FUEhR1t6D3wgLuiVazA5APOD0laUsOu6zPOwpUYWX/2jhok58Gw48fVcvYNSwCVIcEEqu08GmW/d0xoZDZjXuav4bFVN4Qv3V3yzFTEYpFhLUqgw6Cp6ZldJATKZoYx1aZiWHncFBrhl05CO3v3KlZeHpWSIaPRM4ox4QnhCallGlgcs6hwP3GdCC5EsY0COKtaw0D8JesfDAuXuoQdvMD6HwbudxX/HqvjuPCYGJtwNqF+C9HeP4LaDHcGZoWTAf3mVVvs3CQqUHco/hCMkLHhZV6BUYqwQKTnAGn8spGMp13hXqkIy4LzegsaT4HHRSH5OoDvEGXowGJWN0cyeB/DIRshBWNiTIUzqr7Hb7ZuXigdZTOBVBu/zPTtlihMFGPrEPSRGv7Y0idTY/kVsW96+CNArDoL+GD98jSO6wm9noSNr6Axj2+l7GAGr0NnsXR5/R/tUwksY2KIIqhA+F1lBrpyLEnpubU1zEL1aQeR4NxeRn5F7eWaKfM/iXZoqyGJhA3Dl/A/lKVQcVIWfTcXteAtt9MexQNKix+QnVcrmOd3MlNMAmjdNliCa76ya5Okj2Z2XGPhaP0e+D5U6cbfHnxezXaVUxOlxDw== root@DESKTOP-DANIL

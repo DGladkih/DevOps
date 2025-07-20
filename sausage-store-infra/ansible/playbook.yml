@@ -1,0 +1,18 @@
+---
+- name: Setup backend
+  hosts: backend
+  become: true
+  remote_user: ansible
+  vars:
+    version: "0.1.0"
+  roles:
+    - backend
+
+- name: Setup frontend
+  hosts: frontend
+  become: true
+  remote_user: ansible
+  vars:
+    version: "0.1.0"
+  roles:
+    - frontend
